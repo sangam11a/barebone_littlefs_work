@@ -4,6 +4,7 @@
 "./Core/Src/lfs_port.o"
 "./Core/Src/lfs_port_ai.o"
 "./Core/Src/lfs_util.o"
+"./Core/Src/littlefs_driver.o"
 "./Core/Src/main.o"
 "./Core/Src/main_original.o"
 "./Core/Src/nor.o"

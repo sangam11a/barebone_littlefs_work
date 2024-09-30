@@ -19,7 +19,7 @@
 #include <stdint.h>
 #include <stdint.h>
 #include <stddef.h>
-
+#include "main.h"
 #include "nor_defines.h"
 #include "nor_ids.h"
 
@@ -273,4 +273,6 @@ nor_err_e NOR_ReadPage(nor_t *nor, uint8_t *pBuffer, uint32_t PageAddr, uint32_t
 nor_err_e NOR_ReadSector(nor_t *nor, uint8_t *pBuffer, uint32_t SectorAddr, uint32_t Offset, uint32_t NumByteToRead);
 nor_err_e NOR_ReadBlock(nor_t *nor, uint8_t *pBuffer, uint32_t BlockAddr, uint32_t Offset, uint32_t NumByteToRead);
 
+
+void Read_ID(SPI_HandleTypeDef *SPI, GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin, uint8_t *data);
 #endif /* FLASH_NOR_NOR_H_ */

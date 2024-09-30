@@ -21,9 +21,9 @@
  */
 
 
+extern UART_HandleTypeDef huart2;
 #if defined (NOR_DEBUG)
 // TODO The printf :)
-extern UART_HandleTypeDef huart2;
 void UART_Printf(const char *format, ...) {
     char buffer[256]; // Adjust size as needed
     va_list args;
@@ -65,6 +65,33 @@ enum _nor_sr_select_e{
 	_SELECT_SR3,
 };
 
+void Read_ID(SPI_HandleTypeDef *SPI, GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin, uint8_t *data) {
+	uint8_t cmd = 0x9E;
+//	uint8_t data[20];
+	int i;
+	HAL_GPIO_WritePin(GPIOx,GPIO_Pin, GPIO_PIN_RESET);
+	HAL_Delay(1);
+	HAL_SPI_Transmit(SPI, &cmd, 1, 300);
+	HAL_SPI_Receive(SPI, data, 20, 1000);
+	HAL_Delay(1);
+
+	HAL_GPIO_WritePin(GPIOx,GPIO_Pin, GPIO_PIN_SET);
+	HAL_Delay(500);
+//	buff.MAN_ID = data[0];
+//	buff.M_TYPE = data[1];
+//	buff.M_CAP = data[2];
+//	buff.REM_BYTES = data[3];
+//	buff.EXT_ID = data[4];
+//	buff.DEV_INFO = data[5];
+//	for (i = 6; i < 20; i++) {
+//		buff.UID[i] = data[i];
+//	}
+	HAL_UART_Transmit(&huart2, data, sizeof(data), 1000);
+	HAL_UART_Transmit(&huart2, "Data received\n--------------", sizeof("Data received-----------\n"), 1000);
+
+//	*rxData = buff;
+	return;
+}
 /* Functions */
 
 static void _nor_cs_assert(nor_t *nor){
@@ -684,7 +711,7 @@ nor_err_e NOR_ReadBytes(nor_t *nor, uint8_t *pBuffer, uint32_t ReadAddr, uint32_
 		NOR_PRINTF("%02X ", originalBuffer[i]);
 	}
 	NOR_PRINTF("\n=============================================================\n");
-	NOR_PRINTF("w25qxx ReadBytes done.\n");
+	NOR_PRINTF("mt25qxx ReadBytes done.\n");
 
 	return NOR_OK;
 }

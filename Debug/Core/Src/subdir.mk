@@ -11,6 +11,7 @@ C_SRCS += \
 ../Core/Src/lfs_port.c \
 ../Core/Src/lfs_port_ai.c \
 ../Core/Src/lfs_util.c \
+../Core/Src/littlefs_driver.c \
 ../Core/Src/main.c \
 ../Core/Src/main_original.c \
 ../Core/Src/nor.c \
@@ -28,6 +29,7 @@ OBJS += \
 ./Core/Src/lfs_port.o \
 ./Core/Src/lfs_port_ai.o \
 ./Core/Src/lfs_util.o \
+./Core/Src/littlefs_driver.o \
 ./Core/Src/main.o \
 ./Core/Src/main_original.o \
 ./Core/Src/nor.o \
@@ -45,6 +47,7 @@ C_DEPS += \
 ./Core/Src/lfs_port.d \
 ./Core/Src/lfs_port_ai.d \
 ./Core/Src/lfs_util.d \
+./Core/Src/littlefs_driver.d \
 ./Core/Src/main.d \
 ./Core/Src/main_original.d \
 ./Core/Src/nor.d \

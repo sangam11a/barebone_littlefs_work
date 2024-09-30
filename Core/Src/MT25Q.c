@@ -32,36 +32,36 @@ static void Reset_Enable();
  *
  * @retval	20 bytes of specific data can be read
  */
-void Read_ID(SPI_HandleTypeDef *SPI, DEVICE_ID *rxData) {
-	uint8_t cmd = READ_ID;
-	DEVICE_ID buff;
-	uint8_t data[20];
-	int i;
-	FM_Enable(SPI);
-	HAL_GPIO_WritePin(GPIOB,GPIO_PIN_12, GPIO_PIN_RESET);
-	HAL_Delay(1);
-	HAL_SPI_Transmit(SPI, &cmd, 1, 300);
-	HAL_SPI_Receive(SPI, data, 20, 1000);
-	HAL_Delay(1);
-	FM_Disable(SPI);
-
-	HAL_GPIO_WritePin(GPIOB,GPIO_PIN_12, GPIO_PIN_SET);
-	HAL_Delay(500);
-	buff.MAN_ID = data[0];
-	buff.M_TYPE = data[1];
-	buff.M_CAP = data[2];
-	buff.REM_BYTES = data[3];
-	buff.EXT_ID = data[4];
-	buff.DEV_INFO = data[5];
-//	for (i = 6; i < 20; i++) {
-//		buff.UID[i] = data[i];
-//	}
-	HAL_UART_Transmit(&huart2, data, sizeof(data), 1000);
-	HAL_UART_Transmit(&huart2, "Data received\n--------------", sizeof("Data received-----------\n"), 1000);
-
-	*rxData = buff;
-	return;
-}
+//void Read_ID(SPI_HandleTypeDef *SPI, DEVICE_ID *rxData) {
+//	uint8_t cmd = READ_ID;
+//	DEVICE_ID buff;
+//	uint8_t data[20];
+//	int i;
+//	FM_Enable(SPI);
+//	HAL_GPIO_WritePin(GPIOB,GPIO_PIN_12, GPIO_PIN_RESET);
+//	HAL_Delay(1);
+//	HAL_SPI_Transmit(SPI, &cmd, 1, 300);
+//	HAL_SPI_Receive(SPI, data, 20, 1000);
+//	HAL_Delay(1);
+//	FM_Disable(SPI);
+//
+//	HAL_GPIO_WritePin(GPIOB,GPIO_PIN_12, GPIO_PIN_SET);
+//	HAL_Delay(500);
+//	buff.MAN_ID = data[0];
+//	buff.M_TYPE = data[1];
+//	buff.M_CAP = data[2];
+//	buff.REM_BYTES = data[3];
+//	buff.EXT_ID = data[4];
+//	buff.DEV_INFO = data[5];
+////	for (i = 6; i < 20; i++) {
+////		buff.UID[i] = data[i];
+////	}
+//	HAL_UART_Transmit(&huart2, data, sizeof(data), 1000);
+//	HAL_UART_Transmit(&huart2, "Data received\n--------------", sizeof("Data received-----------\n"), 1000);
+//
+//	*rxData = buff;
+//	return;
+//}
 
 /*
  * @brief  use 4-byte addressing mode for flash operation

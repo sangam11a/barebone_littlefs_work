@@ -1,8 +1,8 @@
 /*
- * nor_ids.c
+ * nor_ids.h
  *
- *  Created on: Oct 6, 2023
- *      Author: pablo-jean
+ *  Created on: Sep 29, 2024
+ *      Author: Sangam
  */
 
 #include "nor_ids.h"
