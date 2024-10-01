@@ -1,4 +1,3 @@
-"./Core/Src/MT25Q.o"
 "./Core/Src/RM3100QUAD.o"
 "./Core/Src/lfs.o"
 "./Core/Src/lfs_port.o"

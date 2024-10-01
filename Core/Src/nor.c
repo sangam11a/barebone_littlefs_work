@@ -70,10 +70,10 @@ void Read_ID(SPI_HandleTypeDef *SPI, GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin, uin
 //	uint8_t data[20];
 	int i;
 	HAL_GPIO_WritePin(GPIOx,GPIO_Pin, GPIO_PIN_RESET);
-	HAL_Delay(1);
+	HAL_Delay(100);
 	HAL_SPI_Transmit(SPI, &cmd, 1, 300);
 	HAL_SPI_Receive(SPI, data, 20, 1000);
-	HAL_Delay(1);
+	HAL_Delay(100);
 
 	HAL_GPIO_WritePin(GPIOx,GPIO_Pin, GPIO_PIN_SET);
 	HAL_Delay(500);
@@ -231,8 +231,8 @@ nor_err_e _nor_WaitForWriteEnd(nor_t *nor, uint32_t msTimeout)
 	_nor_spi_tx(nor, (uint8_t*)&ReadSr1Cmd, sizeof(ReadSr1Cmd));
 	do{
 		_nor_spi_rx(nor, &nor->_internal.u8StatusReg1, sizeof(uint8_t));
-		_nor_delay_us(nor, 10);
-		msTimeout -= 10;
+		_nor_delay_us(nor, 100);
+		msTimeout -= 100;
 	}while ((nor->_internal.u8StatusReg1 & SR1_BUSY_BIT) && (msTimeout > 0));
 	_nor_cs_deassert(nor);
 

@@ -128,66 +128,33 @@ int main(void)
   MX_RTC_Init();
   MX_USB_PCD_Init();
   /* USER CODE BEGIN 2 */
-//  uint8_t data[20];
 
-  while(1)
-  {
-	  Read_ID(&hspi2, GPIOB, GPIO_PIN_12, &data);
-		if(data[0] == 32){
-			break;
-		}
-  }
-  int j=0;
-  uint16_t data1[30];//{'e','p','d','m',0x57,0x58,0x59,0x60,0x61};
-  for(int i=0;i<30;i++){
-  	data[i] = i*1000;
-  }
-
- for(int i=0;i<50;i++){
-	  write_to_file("/epdm2.txt", data1, sizeof(data1));
-//	  HAL_Delay(100);
-  }
-
+  HAL_GPIO_WritePin(GPIOB, MSN_EN1_Pin, SET); // Set PB9 high
+  HAL_GPIO_WritePin(GPIOB, MSN_EN2_Pin, SET); // Set PB8 high
+  HAL_GPIO_WritePin(GPIOB, MSN_EN3_Pin, SET); // Set PA15 high
+  HAL_GPIO_WritePin(GPIOB, MSN_EN4_Pin, SET); // Set PA8 high
+  uint8_t data[20];
+ Read_ID(&hspi2, GPIOB, GPIO_PIN_12, data);
     HAL_Delay(100);
     for(int i=0;i<4;i++){
     	SET_COUNT(i);
     	Continuous_Mode(i);
     	 TMRC_Mode(i);
     }
-//Magnetometer data reading
-    while(1){
-    	    for(int i=0;i<4;i++){
-
-			Mea_Result(i);
-			Comb_measurement(i);
-    	    }
-    }
-    //Magnetometer data reading ends here
-  HAL_UART_Transmit(&huart1,"EPDM is starting *********\n", sizeof("EPDM is starting *********\n"),1000);
-
-  HAL_UART_Transmit(&huart1,"Chip erase starting....\n", sizeof("Chip erase starting....\n"),1000);
-//  Chip_Erase(&hspi3);
-
-  HAL_UART_Transmit(&huart1,"Chip erase ending....\n", sizeof("Chip erase ending....\n"),1000);
-  HAL_UART_Transmit(&huart1,"Chip erase ending....\n", sizeof("Chip erase ending....\n"),1000);
-
-
-
-write_to_file("/epdm2.txt", data1, sizeof(data1));
-
-   Counter.bootCount += 1;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
-		  Counter.secCount += 1;
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-//		  READ_DATA();
+		  for(int i=0;i<4;i++){
+			  Mea_Result(i);
+			  Comb_measurement(i);
+			  HAL_Delay(100);
+		  }
 
 
 

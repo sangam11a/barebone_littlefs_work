@@ -365,10 +365,10 @@ void __init_storage(){
 	__init_littefs();
 }
 
-void write_to_file(char *filename, uint8_t *data,uint32_t data_length){
+void write_to_file(char *filename, uint8_t *data, uint32_t data_length){
 	  __init_storage();
 	  list_directories_with_file_count(&Lfs,"");
-	  lfs_file_open(&Lfs, &File, filename, LFS_O_CREAT | LFS_O_RDWR  |LFS_O_APPEND );
+	  lfs_file_open(&Lfs, &File, filename, LFS_O_CREAT | LFS_O_RDWR  | LFS_O_APPEND );
 	  lfs_file_write(&Lfs, &File, data, data_length);
 	  lfs_file_close(&Lfs, &File);
 	  lfs_unmount(&Lfs);

@@ -5,7 +5,6 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../Core/Src/MT25Q.c \
 ../Core/Src/RM3100QUAD.c \
 ../Core/Src/lfs.c \
 ../Core/Src/lfs_port.c \
@@ -23,7 +22,6 @@ C_SRCS += \
 ../Core/Src/system_stm32f1xx.c 
 
 OBJS += \
-./Core/Src/MT25Q.o \
 ./Core/Src/RM3100QUAD.o \
 ./Core/Src/lfs.o \
 ./Core/Src/lfs_port.o \
@@ -41,7 +39,6 @@ OBJS += \
 ./Core/Src/system_stm32f1xx.o 
 
 C_DEPS += \
-./Core/Src/MT25Q.d \
 ./Core/Src/RM3100QUAD.d \
 ./Core/Src/lfs.d \
 ./Core/Src/lfs_port.d \
