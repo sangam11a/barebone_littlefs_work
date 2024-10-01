@@ -17,4 +17,4 @@ littlefs_driver.c:236:5:count_files_in_directory	344	static
 littlefs_driver.c:273:6:list_directories_with_file_count	1104	static
 littlefs_driver.c:319:6:list_files_with_size	1112	static
 littlefs_driver.c:363:6:__init_storage	8	static
-littlefs_driver.c:368:6:write_to_file	16	static
+littlefs_driver.c:368:6:write_to_file	24	static

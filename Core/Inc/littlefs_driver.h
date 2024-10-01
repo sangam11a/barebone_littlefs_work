@@ -14,7 +14,6 @@
 
 
 /*Definition for debug uart, spi port and gpio pin*/
-#define DEBUG_UART huart2
 #define CS_FLASH_MEMORY_PORT GPIOB
 #define CS_FLASH_MEMORY_PIN GPIO_PIN_12
 #define SPI_PIN_FLASH hspi2

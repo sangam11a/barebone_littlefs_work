@@ -231,8 +231,8 @@ nor_err_e _nor_WaitForWriteEnd(nor_t *nor, uint32_t msTimeout)
 	_nor_spi_tx(nor, (uint8_t*)&ReadSr1Cmd, sizeof(ReadSr1Cmd));
 	do{
 		_nor_spi_rx(nor, &nor->_internal.u8StatusReg1, sizeof(uint8_t));
-		_nor_delay_us(nor, 100);
-		msTimeout -= 100;
+		_nor_delay_us(nor, 10);
+		msTimeout -= 10;
 	}while ((nor->_internal.u8StatusReg1 & SR1_BUSY_BIT) && (msTimeout > 0));
 	_nor_cs_deassert(nor);
 

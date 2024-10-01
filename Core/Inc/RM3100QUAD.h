@@ -81,6 +81,7 @@ void myDebug(const char *fmt, ...);
 void UART_TransmitString(char *str);
 void set_time (void);
 void get_time(void);
+void READ_DATA();
 //void select_mag(uint8_t chip_select);
 //void Deselect_mag(uint8_t chip_Deselect);
 

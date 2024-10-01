@@ -23,7 +23,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "stdarg.h"
-
+#include "RM3100QUAD.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -50,7 +50,6 @@ SPI_HandleTypeDef hspi2;
 
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
-#define DEBUG_UART huart2
 
 PCD_HandleTypeDef hpcd_USB_FS;
 
@@ -70,7 +69,7 @@ typedef struct{
 	uint32_t secCount;
 	uint32_t bootCount;
 }app_count_t;
-
+uint8_t data[20];
 app_count_t Counter = {0};
 /* USER CODE END PV */
 
@@ -107,8 +106,7 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-
-	HAL_Init();
+  HAL_Init();
 
   /* USER CODE BEGIN Init */
 
@@ -130,32 +128,41 @@ int main(void)
   MX_RTC_Init();
   MX_USB_PCD_Init();
   /* USER CODE BEGIN 2 */
-  uint8_t data[20];
-//simple
-//  //First erase flash memory
-//  	Sector_Erase_4B(&hspi3, address, sector_size);
-//	//id read
+//  uint8_t data[20];
+
   while(1)
   {
-//	Read_ID(&hspi2, &dev_id);
 	  Read_ID(&hspi2, GPIOB, GPIO_PIN_12, &data);
-	if(data[0] == 32){
-		break;
-	}
+		if(data[0] == 32){
+			break;
+		}
   }
-//
-//	HAL_Delay(100);
+  int j=0;
+  uint16_t data1[30];//{'e','p','d','m',0x57,0x58,0x59,0x60,0x61};
+  for(int i=0;i<30;i++){
+  	data[i] = i*1000;
+  }
 
-	//status_reg = Status_Reg(&hspi3);
-	//  int add = 0;
-	//  for(int i=0;i<300;i++){
-	//	  Sector_Erase_4B(&hspi3, add, 64);
-	//	  add+=65536;
-	//  }
+ for(int i=0;i<50;i++){
+	  write_to_file("/epdm2.txt", data1, sizeof(data1));
+//	  HAL_Delay(100);
+  }
 
-	  // myprintf("Starting LittleFS application........\n");
     HAL_Delay(100);
+    for(int i=0;i<4;i++){
+    	SET_COUNT(i);
+    	Continuous_Mode(i);
+    	 TMRC_Mode(i);
+    }
+//Magnetometer data reading
+    while(1){
+    	    for(int i=0;i<4;i++){
 
+			Mea_Result(i);
+			Comb_measurement(i);
+    	    }
+    }
+    //Magnetometer data reading ends here
   HAL_UART_Transmit(&huart1,"EPDM is starting *********\n", sizeof("EPDM is starting *********\n"),1000);
 
   HAL_UART_Transmit(&huart1,"Chip erase starting....\n", sizeof("Chip erase starting....\n"),1000);
@@ -165,66 +172,9 @@ int main(void)
   HAL_UART_Transmit(&huart1,"Chip erase ending....\n", sizeof("Chip erase ending....\n"),1000);
 
 
-int j=0;
-uint8_t data1[]={'e','p','d','m',0x57,0x58,0x59,0x60,0x61};
-write_to_file("/epdm.txt",&data1);
-//
-//__init_storage();
-//list_directories_with_file_count(&Lfs,"");
-//
-//list_directories_with_file_count(&Lfs,"../../");
-////while(1){
-////	j++;
-//for (j=0;j<12;j++){
-////		  list_files(&Lfs);
-////		  list_files(&Lfs2);
-//		//  char path[200];
-//		  char txt[40]={0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f};//="\nprem is writing it manually";
-////		  txt[0] =j;
-//		  sprintf(txt,"prem is writing it manually %d\n.\0", j);
-//
-//		  list_files_with_size(&Lfs, "");
-////
-////		  list_files_with_size(&Lfs2, "/");
-//		  		  lfs_file_open(&Lfs, &File, "/satelliteHealth.txt", LFS_O_CREAT | LFS_O_RDWR  |LFS_O_APPEND | LFS_O_CREAT );
-//		  		  lfs_file_write(&Lfs, &File, &txt, strlen(txt));
-////		  		lfs_file_write(&Lfs, &File, j, sizeof(j));
-//		  		  lfs_file_close(&Lfs, &File);
-//
-//		  		 lfs_file_open(&Lfs, &File, "/test.txt", LFS_O_RDWR  |LFS_O_APPEND);
-//
-//				  sprintf(txt,"test file.\0", j);
-//		  				  		  lfs_file_write(&Lfs, &File, &txt, strlen(txt));
-//		  		//		  		lfs_file_write(&Lfs, &File, j, sizeof(j));
-//		  				  		  lfs_file_close(&Lfs, &File);
-////		  read_file_from_littlefs(&Lfs2, "common1.txt");
-//		//  read_file_from_littlefs(&Lfs, "sat_health.txt");
-////		  read_file_from_littlefs(&Lfs, "common.txt");
-////		  lfs_unmount(&Lfs2);
-//		  lfs_unmount(&Lfs);
-//		  HAL_Delay(10000);
-//	}
-////  read_file_from_littlefs(&Lfs, "epdm.txt");
-////   lfs_file_open(&Lfs, &File, "/sat_health.txt", LFS_O_RDWR );
-//////   lfs_file_read(&Lfs, &File, &Counter, sizeof(app_count_t));
-////
-////   lfs_file_read(&Lfs, &File, &tx, sizeof(tx));
-////   HAL_UART_Transmit(&DEBUG_UART,tx,strlen(tx),1000);
-////   lfs_file_close(&Lfs, &File);
-////
-////   lfs_file_open(&Lfs, &File, "flags.txt", LFS_O_RDWR );
-////  //   lfs_file_read(&Lfs, &File, &Counter, sizeof(app_count_t));
-////
-////     lfs_file_read(&Lfs, &File, &tx, sizeof(tx));
-////     HAL_UART_Transmit(&DEBUG_UART,tx,strlen(tx),1000);
-////     lfs_file_close(&Lfs, &File);
-////
-////     lfs_file_open(&Lfs, &File, "epdm.txt", LFS_O_RDWR );
-////    //   lfs_file_read(&Lfs, &File, &Counter, sizeof(app_count_t));
-////
-////       lfs_file_read(&Lfs, &File, &tx, sizeof(tx));
-////       HAL_UART_Transmit(&DEBUG_UART,tx,strlen(tx),1000);
-////       lfs_file_close(&Lfs, &File);
+
+write_to_file("/epdm2.txt", data1, sizeof(data1));
+
    Counter.bootCount += 1;
   /* USER CODE END 2 */
 
@@ -232,22 +182,13 @@ write_to_file("/epdm.txt",&data1);
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-//	  sprintf(Text, "Bt %lu |Ct %lu\n", Counter.bootCount, Counter.secCount);
-//	  HAL_UART_Transmit(&DEBUG_UART,Text, sizeof(Text),1000);
-//
-//	  HAL_UART_Transmit(&DEBUG_UART,"*******\n", sizeof("*******\n"),1000);
-
-//		  lfs_file_open(&Lfs, &File, "count.txt", LFS_O_RDWR | LFS_O_CREAT |LFS_O_APPEND);
-//		  lfs_file_write(&Lfs, &File, &Counter.secCount, 32);
-//		  lfs_file_close(&Lfs, &File);
-
-//		  while ((HAL_GetTick() - HalTickAux) < 1000);
-//		  HAL_Delay(1000);
 
 		  Counter.secCount += 1;
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+//		  READ_DATA();
+
 
 
 

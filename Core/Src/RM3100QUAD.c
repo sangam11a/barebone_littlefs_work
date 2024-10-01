@@ -46,6 +46,9 @@ uint8_t x_axis[4];
 uint8_t y_axis[4];
 uint8_t z_axis[4];
 
+uint8_t read_X0[4], read_X1[4], read_X2[4];
+uint8_t read_Y0[4], read_Y1[4], read_Y2[4];
+uint8_t read_Z0[4], read_Z1[4], read_Z2[4];
 
 uint8_t rm3100_MSB_X_buf[] = { rm3100_MSB_X };
 uint8_t rm3100_MSB_Y_buf[] = { rm3100_MSB_Y };
