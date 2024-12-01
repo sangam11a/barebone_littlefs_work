@@ -12,7 +12,7 @@ C_SRCS += \
 ../Core/Src/lfs_util.c \
 ../Core/Src/littlefs_driver.c \
 ../Core/Src/main.c \
-../Core/Src/main_original.c \
+../Core/Src/main_23.c \
 ../Core/Src/nor.c \
 ../Core/Src/nor_ids.c \
 ../Core/Src/stm32f1xx_hal_msp.c \
@@ -29,7 +29,7 @@ OBJS += \
 ./Core/Src/lfs_util.o \
 ./Core/Src/littlefs_driver.o \
 ./Core/Src/main.o \
-./Core/Src/main_original.o \
+./Core/Src/main_23.o \
 ./Core/Src/nor.o \
 ./Core/Src/nor_ids.o \
 ./Core/Src/stm32f1xx_hal_msp.o \
@@ -46,7 +46,7 @@ C_DEPS += \
 ./Core/Src/lfs_util.d \
 ./Core/Src/littlefs_driver.d \
 ./Core/Src/main.d \
-./Core/Src/main_original.d \
+./Core/Src/main_23.d \
 ./Core/Src/nor.d \
 ./Core/Src/nor_ids.d \
 ./Core/Src/stm32f1xx_hal_msp.d \

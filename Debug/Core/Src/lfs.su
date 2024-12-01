@@ -53,7 +53,7 @@ lfs.c:471:13:lfs_mlist_append	16	static
 lfs.c:530:12:lfs_alloc_lookahead	24	static
 lfs.c:546:13:lfs_alloc_ack	16	static
 lfs.c:552:13:lfs_alloc_drop	16	static
-lfs.c:559:12:lfs_alloc	32	static
+lfs.c:559:12:lfs_alloc	24	static
 lfs.c:607:19:lfs_dir_getslice	72	static
 lfs.c:669:19:lfs_dir_get	40	static
 lfs.c:676:12:lfs_dir_getread	56	static
@@ -77,7 +77,7 @@ lfs.c:1723:13:lfs_dir_needsrelocation	16	static
 lfs.c:1736:12:lfs_dir_compact	152	static
 lfs.c:1909:12:lfs_dir_splittingcompact	104	static
 lfs.c:2005:12:lfs_dir_relocatingcommit	168	static
-lfs.c:2176:12:lfs_dir_orphaningcommit	256	static
+lfs.c:2176:12:lfs_dir_orphaningcommit	248	static
 lfs.c:2369:12:lfs_dir_commit	32	static
 lfs.c:2393:12:lfs_rawmkdir	240	static
 lfs.c:2489:12:lfs_dir_rawopen	64	static
@@ -95,7 +95,7 @@ lfs.c:3000:12:lfs_file_rawopen	40	static
 lfs.c:3008:12:lfs_file_rawclose	24	static
 lfs.c:3028:12:lfs_file_relocate	64	static
 lfs.c:3099:12:lfs_file_outline	24	static
-lfs.c:3112:12:lfs_file_flush	136	static
+lfs.c:3112:12:lfs_file_flush	128	static
 lfs.c:3193:12:lfs_file_rawsync	72	static
 lfs.c:3245:20:lfs_file_flushedread	80	static
 lfs.c:3306:20:lfs_file_rawread	32	static
@@ -125,8 +125,8 @@ lfs.c:4426:12:lfs_fs_parent_match	72	static
 lfs.c:4447:19:lfs_fs_parent	64	static
 lfs.c:4476:12:lfs_fs_preporphans	24	static
 lfs.c:4487:13:lfs_fs_prepmove	24	static
-lfs.c:4497:12:lfs_fs_demove	96	static
-lfs.c:4529:12:lfs_fs_deorphan	216	static
+lfs.c:4497:12:lfs_fs_demove	72	static
+lfs.c:4529:12:lfs_fs_deorphan	208	static
 lfs.c:4656:12:lfs_fs_forceconsistency	24	static
 lfs.c:4671:12:lfs_fs_size_count	24	static
 lfs.c:4678:20:lfs_fs_rawsize	24	static

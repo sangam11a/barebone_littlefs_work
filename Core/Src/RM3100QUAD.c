@@ -18,7 +18,7 @@
 #define SPI_SSN_LOW 0
 
 float gain = 38.00;  //Gain for 100 cycle count
-#define DATA_SIZE 100
+#define DATA_SIZE 250
 int16_t data1[DATA_SIZE];
 uint32_t counter=0;
 extern SPI_HandleTypeDef hspi1;
@@ -45,9 +45,9 @@ float Y_axis[4];
 float Z_axis[4];
 float Magnitude[4];
 
-uint8_t x_axis[4];
-uint8_t y_axis[4];
-uint8_t z_axis[4];
+uint16_t x_axis[4];
+uint16_t y_axis[4];
+uint16_t z_axis[4];
 
 uint8_t read_X0[4], read_X1[4], read_X2[4];
 uint8_t read_Y0[4], read_Y1[4], read_Y2[4];
@@ -151,12 +151,12 @@ void Mea_Result(int chip_select) {
 	HAL_GPIO_WritePin(SSN_PORTS[chip_select], SSN_PINS[chip_select], SPI_SSN_HIGH); //SSN HIGN
 }
 
-void UART_TransmitString(char *str) {
-    while (*str != '\0') {
-        HAL_UART_Transmit(&huart2, (uint8_t*)str, 1, HAL_MAX_DELAY);
-        str++;
-    }
-}
+//void UART_TransmitString(char *str) {
+//    while (*str != '\0') {
+//        HAL_UART_Transmit(&huart2, (uint8_t*)str, 1, HAL_MAX_DELAY);
+//        str++;
+//    }
+//}
 
 //Set time
 //void set_time (void)
@@ -231,16 +231,21 @@ void Comb_measurement(int chip_select) {
     Z_axis[chip_select] = (float)signed_mag_Z[chip_select] / gain;
 
     //Converting float axis data in to  integer data
-    x_axis[chip_select] = (int)(X_axis[chip_select] * 1000);
-    y_axis[chip_select] = (int)(Y_axis[chip_select] * 1000);
-    z_axis[chip_select] = (int)(Z_axis[chip_select] * 1000);
+    x_axis[chip_select] = (int16_t)(X_axis[chip_select] * 100);
+    y_axis[chip_select] = (int16_t)(Y_axis[chip_select] * 100);
+    z_axis[chip_select] = (int16_t)(Z_axis[chip_select] * 100);
 
     data1[counter++]=x_axis[chip_select];
     data1[counter++]=y_axis[chip_select];
     data1[counter++]=z_axis[chip_select];
+    char buf[100];
+//    sprintf(buf, "%0.2f\t%0.2f\t%0.2f\t\t\0",X_axis[chip_select],Y_axis[chip_select],Z_axis[chip_select]);
+//    HAL_UART_Transmit(&huart1, buf, strlen(buf),1000);
 
-    if(counter +12 > DATA_SIZE){
-    	 write_to_file("/epdm_re.txt", data1, counter);
+    if(counter + 12 > DATA_SIZE){
+    	write_to_file("/test.txt", data1, counter);
+    	HAL_UART_Transmit(&huart2, data1, counter, 1000);
+    	HAL_UART_Transmit(&huart1, "Data written to flash\n", sizeof("Data written to flash\n"), 1000);
     	counter = 0;
     }
 

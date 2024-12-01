@@ -47,7 +47,8 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
-#define DEBUG_UART huart2
+extern UART_HandleTypeDef huart1;
+#define DEBUG_UART huart1
 
 /* USER CODE END EM */
 
@@ -86,7 +87,7 @@ void Error_Handler(void);
 #define MSN_EN1_Pin GPIO_PIN_9
 #define MSN_EN1_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
-
+//void Read_ID(SPI_HandleTypeDef *SPI, GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin, uint8_t *data);
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

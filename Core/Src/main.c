@@ -61,7 +61,7 @@ uint16_t address = 0x00;
 uint8_t status_reg=0;
 uint8_t READ_FLAG=0;
 int tx[70];
-
+uint16_t time_counter=0;
 
 uint8_t DEBUG_DATA_RX_FLAG = 0;
 // variables used by the filesystem
@@ -71,6 +71,9 @@ typedef struct{
 }app_count_t;
 uint8_t data[20];
 app_count_t Counter = {0};
+
+uint8_t COMMAND[] = {0x53,0x0e,0x0d,0x0e,0x01,0x7e};
+uint8_t OBC_HANDSHAKE_SUCESS,OBC_HANDSHAKE_RX[7]={'\0'},OBC_HANDSHAKE_TX[7]={'\0'};//,OBC_HANDSHAKE_RX[7]={'\0'};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -83,7 +86,38 @@ static void MX_USART2_UART_Init(void);
 static void MX_RTC_Init(void);
 static void MX_USB_PCD_Init(void);
 /* USER CODE BEGIN PFP */
+uint8_t OBC_HANDSHAKE(){
+	memset(OBC_HANDSHAKE_RX, '\0', sizeof(OBC_HANDSHAKE_RX));
+	memset(OBC_HANDSHAKE_TX, '\0', sizeof(OBC_HANDSHAKE_TX));
+	OBC_HANDSHAKE_SUCESS = 0;
+	do{
+	if(HAL_UART_Receive(&huart2, OBC_HANDSHAKE_RX, sizeof(OBC_HANDSHAKE_RX),1000)==HAL_OK){
+		if(HAL_UART_Transmit(&huart2, OBC_HANDSHAKE_RX, sizeof(OBC_HANDSHAKE_RX), 3000)==HAL_OK){
+			OBC_HANDSHAKE_SUCESS = 1;
+			HAL_UART_Transmit(&huart1, "HANDSHAKE SUCCESSFULLY\n", "HANDSHAKE SUCCESSFULLY", 1000);
+		}
+	}
+	}while(!OBC_HANDSHAKE_SUCESS);
+	return OBC_HANDSHAKE_SUCESS;
+}
+uint8_t OBC_COMMAND(){
+	memset(OBC_HANDSHAKE_RX, '\0', sizeof(OBC_HANDSHAKE_RX));
+	memset(OBC_HANDSHAKE_TX, '\0', sizeof(OBC_HANDSHAKE_TX));
+	OBC_HANDSHAKE_SUCESS = 0;
+	do{
+	if(HAL_UART_Receive(&huart2, OBC_HANDSHAKE_RX, sizeof(OBC_HANDSHAKE_RX),1000)==HAL_OK){
+		if(HAL_UART_Transmit(&huart2, OBC_HANDSHAKE_RX, sizeof(OBC_HANDSHAKE_RX), 3000)==HAL_OK){
+			if(OBC_HANDSHAKE_RX[0] == COMMAND[0] && OBC_HANDSHAKE_RX[1] == COMMAND[1] && OBC_HANDSHAKE_RX[2] == COMMAND[2] && OBC_HANDSHAKE_RX[3] == COMMAND[3] && OBC_HANDSHAKE_RX[4] == COMMAND[4] && OBC_HANDSHAKE_RX[5] == COMMAND[5] && OBC_HANDSHAKE_RX[6] == COMMAND[6] )
+				{
+				OBC_HANDSHAKE_SUCESS = 1;
+				HAL_UART_Transmit(&huart1, "COMMAND SUCCESSFULLY\n", "COMMAND SUCCESSFULLY", 1000);
 
+				}
+		}
+	}
+	}while(!OBC_HANDSHAKE_SUCESS);
+	return OBC_HANDSHAKE_SUCESS;
+}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -128,33 +162,71 @@ int main(void)
   MX_RTC_Init();
   MX_USB_PCD_Init();
   /* USER CODE BEGIN 2 */
+//for(int i=0;i<6;i++){
+//
+// 	 write_to_file("/epdm_re.txt", "tet sfm test\n", sizeof("tet sfm test\n"));
+// 	 HAL_Delay(10000);
+//}
+  HAL_UART_Transmit(&huart1, "*****************EPDM starting**************\n",sizeof("*****************EPDM starting**************\n"),1000);
 
+  OBC_HANDSHAKE();
+//  OBC_COMMAND();
   HAL_GPIO_WritePin(GPIOB, MSN_EN1_Pin, SET); // Set PB9 high
   HAL_GPIO_WritePin(GPIOB, MSN_EN2_Pin, SET); // Set PB8 high
   HAL_GPIO_WritePin(GPIOB, MSN_EN3_Pin, SET); // Set PA15 high
   HAL_GPIO_WritePin(GPIOB, MSN_EN4_Pin, SET); // Set PA8 high
   uint8_t data[20];
- Read_ID(&hspi2, GPIOB, GPIO_PIN_12, data);
-    HAL_Delay(100);
+  while(1){
+	  Read_ID(&hspi2, GPIOB, GPIO_PIN_12, data);
+	  if(data[0] == 32){
+		  break;
+	  }
+	  HAL_Delay(10000);
+  }
+
     for(int i=0;i<4;i++){
     	SET_COUNT(i);
     	Continuous_Mode(i);
     	 TMRC_Mode(i);
     }
+    int count=0;
+//    while(count < 290)
+//    {
+//
+//    		  }
+    __init_storage();
+    uint8_t eom[]={0xff,0xd9,'\0'};
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
-  {
+  { time_counter +=1;
+	  if(time_counter <= 3000){
+		  for(int i=0;i<4;i++){
+
+		  		  Mea_Result(i);
+		  		  Comb_measurement(i);
+		  	      count++;
+		  	      }
+//		  HAL_UART_Transmit(&huart1, "\n",1,1000);
+//		      sprintf(tx,"\t\tTime counter value: %d\n\r\0",time_counter);
+//		      HAL_UART_Transmit(&huart1,tx, strlen(tx),1000);
+		  	  HAL_Delay(100);
+	  }
+	  else{
+		  HAL_UART_Transmit(&huart2, eom, sizeof(eom),1000);
+		  HAL_Delay(60000);
+	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		  for(int i=0;i<4;i++){
-			  Mea_Result(i);
-			  Comb_measurement(i);
-			  HAL_Delay(100);
-		  }
+
+//		  count++;
+//		  if(count>0){
+//			  break;
+//		  }
 
 
 
@@ -456,14 +528,14 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void myprintf(const char *fmt, ...) {
-    va_list args;
-    va_start(args, fmt);
-    char buffer[100];
-    vsnprintf(buffer, sizeof(buffer), fmt, args);
-    HAL_UART_Transmit(&DEBUG_UART, (uint8_t*) buffer, strlen(buffer), HAL_MAX_DELAY);
-    va_end(args);
-}
+//void myprintf(const char *fmt, ...) {
+//    va_list args;
+//    va_start(args, fmt);
+//    char buffer[100];
+//    vsnprintf(buffer, sizeof(buffer), fmt, args);
+//    HAL_UART_Transmit(&DEBUG_UART, (uint8_t*) buffer, strlen(buffer), HAL_MAX_DELAY);
+//    va_end(args);
+//}
 
 /* USER CODE END 4 */
 

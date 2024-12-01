@@ -55,12 +55,12 @@ extern UART_HandleTypeDef huart2;
 #ifndef LFS_TRACE
 #ifdef LFS_YES_TRACE
 #define LFS_TRACE_(fmt, ...) \
-    do { \
-        char buffer[256]; \
-        snprintf(buffer, sizeof(buffer), "%s:%d:trace: " fmt "%s\n", __FILE__, __LINE__, __VA_ARGS__); \
-        printf("%s", buffer); \
-        HAL_UART_Transmit(&huart2,buffer, strlen(buffer),1000); \
-    } while (0)
+//    do { \
+//        char buffer[256]; \
+//        snprintf(buffer, sizeof(buffer), "%s:%d:trace: " fmt "%s\n", __FILE__, __LINE__, __VA_ARGS__); \
+//        printf("%s", buffer); \
+//        HAL_UART_Transmit(&huart2,buffer, strlen(buffer),1000); \
+//    } while (0)
 
 #define LFS_TRACE(...) LFS_TRACE_(__VA_ARGS__, "")
 #else
@@ -71,7 +71,7 @@ extern UART_HandleTypeDef huart2;
 #ifndef LFS_DEBUG
 #ifndef LFS_NO_DEBUG
 #define LFS_DEBUG_(fmt, ...) \
-    printf("%s:%d:debug: " fmt "%s\n", __FILE__, __LINE__, __VA_ARGS__)
+//    printf("%s:%d:debug: " fmt "%s\n", __FILE__, __LINE__, __VA_ARGS__)
 #define LFS_DEBUG(...) LFS_DEBUG_(__VA_ARGS__, "")
 #else
 #define LFS_DEBUG(...)
@@ -81,7 +81,7 @@ extern UART_HandleTypeDef huart2;
 #ifndef LFS_WARN
 #ifndef LFS_NO_WARN
 #define LFS_WARN_(fmt, ...) \
-    printf("%s:%d:warn: " fmt "%s\n", __FILE__, __LINE__, __VA_ARGS__)
+//    printf("%s:%d:warn: " fmt "%s\n", __FILE__, __LINE__, __VA_ARGS__)
 #define LFS_WARN(...) LFS_WARN_(__VA_ARGS__, "")
 #else
 #define LFS_WARN(...)
@@ -91,7 +91,7 @@ extern UART_HandleTypeDef huart2;
 #ifndef LFS_ERROR
 #ifndef LFS_NO_ERROR
 #define LFS_ERROR_(fmt, ...) \
-    printf("%s:%d:error: " fmt "%s\n", __FILE__, __LINE__, __VA_ARGS__)
+//    printf("%s:%d:error: " fmt "%s\n", __FILE__, __LINE__, __VA_ARGS__)
 #define LFS_ERROR(...) LFS_ERROR_(__VA_ARGS__, "")
 #else
 #define LFS_ERROR(...)

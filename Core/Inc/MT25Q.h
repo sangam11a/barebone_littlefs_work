@@ -152,7 +152,7 @@ void MUX_DISABLE();
 
 
 /* Read write Operations */
-void Read_ID(SPI_HandleTypeDef *SPI,DEVICE_ID *rxData) ;
+//void Read_ID(SPI_HandleTypeDef *SPI,DEVICE_ID *rxData) ;
 void ADDRESSING_MODE(SPI_HandleTypeDef *SPI, uint8_t mode);
 
 void Bulk_Read(SPI_HandleTypeDef *SPI,uint32_t address, uint8_t *data, uint16_t size);
