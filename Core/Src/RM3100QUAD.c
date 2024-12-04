@@ -243,7 +243,7 @@ void Comb_measurement(int chip_select) {
 //    HAL_UART_Transmit(&huart1, buf, strlen(buf),1000);
 
     if(counter + 12 > DATA_SIZE){
-    	write_to_file("/test.txt", data1, counter);
+    	write_to_file("/epdm.txt", data1, counter);
     	HAL_UART_Transmit(&huart2, data1, counter, 1000);
     	HAL_UART_Transmit(&huart1, "Data written to flash\n", sizeof("Data written to flash\n"), 1000);
     	counter = 0;
