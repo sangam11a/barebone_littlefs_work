@@ -235,8 +235,11 @@ void Comb_measurement(int chip_select) {
     y_axis[chip_select] = (int16_t)(Y_axis[chip_select] * 100);
     z_axis[chip_select] = (int16_t)(Z_axis[chip_select] * 100);
 
+    data1[counter++]=x_axis[chip_select]>> 8;
     data1[counter++]=x_axis[chip_select];
+    data1[counter++]=y_axis[chip_select]>>8;
     data1[counter++]=y_axis[chip_select];
+    data1[counter++]=z_axis[chip_select]>>8;
     data1[counter++]=z_axis[chip_select];
     char buf[100];
 //    sprintf(buf, "%0.2f\t%0.2f\t%0.2f\t\t\0",X_axis[chip_select],Y_axis[chip_select],Z_axis[chip_select]);
@@ -245,6 +248,8 @@ void Comb_measurement(int chip_select) {
     if(counter + 12 > DATA_SIZE){
     	write_to_file("/epdm.txt", data1, counter);
     	HAL_UART_Transmit(&huart2, data1, counter, 1000);
+
+//    	HAL_UART_Transmit(&huart1, data1, counter, 1000);
     	HAL_UART_Transmit(&huart1, "Data written to flash\n", sizeof("Data written to flash\n"), 1000);
     	counter = 0;
     }
@@ -276,7 +281,7 @@ void Comb_measurement(int chip_select) {
    //     Bulk_Read_4B(&hspi2, 0, &read_data, sizeof(read_data));
 
          //Transmitting float data via UART
-      //  myDebug("%.2f %.2f %.2f %.2f ", X_axis[chip_select],Y_axis[chip_select],Z_axis[chip_select],Magnitude[chip_select]);
+        myDebug("%d %d %d %d ", x_axis[chip_select],y_axis[chip_select],z_axis[chip_select],Magnitude[chip_select]);
 //    	myDebug("%.2f", x_axis[chip_select]);
 //    	myDebug("%.2f", y_axis[chip_select]);
 //    	myDebug("%.2f", z_axis[chip_select]);
