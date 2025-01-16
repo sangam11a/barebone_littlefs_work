@@ -86,8 +86,8 @@ void Read_ID(SPI_HandleTypeDef *SPI, GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin, uin
 //	for (i = 6; i < 20; i++) {
 //		buff.UID[i] = data[i];
 //	}
-	HAL_UART_Transmit(&huart2, data, sizeof(data), 1000);
-	HAL_UART_Transmit(&huart2, "Data received\n--------------", sizeof("Data received-----------\n"), 1000);
+//	HAL_UART_Transmit(&huart1, data, sizeof(data), 1000);
+	HAL_UART_Transmit(&huart1, "Data received\n--------------", sizeof("Data received-----------\n"), 1000);
 
 //	*rxData = buff;
 	return;

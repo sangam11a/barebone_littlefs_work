@@ -19,7 +19,7 @@
 
 float gain = 38.00;  //Gain for 100 cycle count
 #define DATA_SIZE 250
-int16_t data1[DATA_SIZE];
+uint8_t data1[DATA_SIZE];
 uint32_t counter=0;
 extern SPI_HandleTypeDef hspi1;
 extern SPI_HandleTypeDef hspi2;
@@ -45,9 +45,9 @@ float Y_axis[4];
 float Z_axis[4];
 float Magnitude[4];
 
-uint16_t x_axis[4];
-uint16_t y_axis[4];
-uint16_t z_axis[4];
+int16_t x_axis[4];
+int16_t y_axis[4];
+int16_t z_axis[4];
 
 uint8_t read_X0[4], read_X1[4], read_X2[4];
 uint8_t read_Y0[4], read_Y1[4], read_Y2[4];
@@ -230,26 +230,39 @@ void Comb_measurement(int chip_select) {
     Y_axis[chip_select] = (float)signed_mag_Y[chip_select] / gain;
     Z_axis[chip_select] = (float)signed_mag_Z[chip_select] / gain;
 
-    //Converting float axis data in to  integer data
-    x_axis[chip_select] = (int16_t)(X_axis[chip_select] * 100);
-    y_axis[chip_select] = (int16_t)(Y_axis[chip_select] * 100);
-    z_axis[chip_select] = (int16_t)(Z_axis[chip_select] * 100);
+    x_axis[chip_select] = (int16_t)(X_axis[chip_select] * 100.0f);
+    y_axis[chip_select] = (int16_t)(Y_axis[chip_select] * 100.0f);
+    z_axis[chip_select] = (int16_t)(Z_axis[chip_select] * 100.0f);
 
-    data1[counter++]=x_axis[chip_select]>> 8;
-    data1[counter++]=x_axis[chip_select];
-    data1[counter++]=y_axis[chip_select]>>8;
-    data1[counter++]=y_axis[chip_select];
-    data1[counter++]=z_axis[chip_select]>>8;
-    data1[counter++]=z_axis[chip_select];
-    char buf[100];
+       // Log integer values for debugging
+       myDebug("Integer values (scaled): X: %d Y: %d Z: %d\n",   x_axis[chip_select], y_axis[chip_select], z_axis[chip_select]);
+       myDebug("Hex values: X: 0x%04X Y: 0x%04X Z: 0x%04X\n", (uint16_t)x_axis[chip_select], (uint16_t)y_axis[chip_select], (uint16_t)z_axis[chip_select]);
+
+
+       uint8_t mag_data[6] = {0};
+        mag_data[0] = (x_axis[chip_select] >> 8) & 0xFF; // High byte of x
+        mag_data[1] = x_axis[chip_select] & 0xFF;        // Low byte of x
+        mag_data[2] = (y_axis[chip_select] >> 8) & 0xFF; // High byte of y
+        mag_data[3] = y_axis[chip_select] & 0xFF;        // Low byte of y
+        mag_data[4] = (z_axis[chip_select] >> 8) & 0xFF; // High byte of z
+        mag_data[5] = z_axis[chip_select] & 0xFF;
+        for(uint8_t i =0;i<6;i++){
+        	data1[counter++] = mag_data[i];
+
+        }
+//    char buf[100];
+    HAL_UART_Transmit(&huart1, mag_data, sizeof(mag_data), 1000);
+//    HAL_UART_Transmit(&huart2, mag_data, sizeof(mag_data), 1000);
+
 //    sprintf(buf, "%0.2f\t%0.2f\t%0.2f\t\t\0",X_axis[chip_select],Y_axis[chip_select],Z_axis[chip_select]);
 //    HAL_UART_Transmit(&huart1, buf, strlen(buf),1000);
 
     if(counter + 12 > DATA_SIZE){
-    	write_to_file("/epdm.txt", data1, counter);
-    	HAL_UART_Transmit(&huart2, data1, counter, 1000);
-
+//    	write_to_file("/epdm.txt", data1, counter);
+//    	HAL_UART_Transmit(&huart2, data1, counter, 1000);
 //    	HAL_UART_Transmit(&huart1, data1, counter, 1000);
+
+        HAL_UART_Transmit(&huart2, data1,counter, 1000);
     	HAL_UART_Transmit(&huart1, "Data written to flash\n", sizeof("Data written to flash\n"), 1000);
     	counter = 0;
     }
@@ -281,7 +294,7 @@ void Comb_measurement(int chip_select) {
    //     Bulk_Read_4B(&hspi2, 0, &read_data, sizeof(read_data));
 
          //Transmitting float data via UART
-        myDebug("%d %d %d %d ", x_axis[chip_select],y_axis[chip_select],z_axis[chip_select],Magnitude[chip_select]);
+//        myDebug("%d %d %d %d ", x_axis[chip_select],y_axis[chip_select],z_axis[chip_select],Magnitude[chip_select]);
 //    	myDebug("%.2f", x_axis[chip_select]);
 //    	myDebug("%.2f", y_axis[chip_select]);
 //    	myDebug("%.2f", z_axis[chip_select]);

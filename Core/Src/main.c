@@ -176,6 +176,7 @@ int main(void)
   HAL_GPIO_WritePin(GPIOB, MSN_EN3_Pin, SET); // Set PA15 high
   HAL_GPIO_WritePin(GPIOB, MSN_EN4_Pin, SET); // Set PA8 high
   uint8_t data[20];
+
   while(1){
 	  Read_ID(&hspi2, GPIOB, GPIO_PIN_12, data);
 	  if(data[0] == 32){
